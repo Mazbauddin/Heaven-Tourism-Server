@@ -26,6 +26,26 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const tourist_spotCollection = client
+      .db("tourist_spotDB")
+      .collection("tourist_spot");
+
+    // get tourist spot data
+    app.get("/tourist_spot", async (req, res) => {
+      const cursor = tourist_spotCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // post tourist spot data
+    app.post("/tourist_spot", async (req, res) => {
+      const newTouristSpot = req.body;
+      console.log(newTouristSpot);
+      const result = await tourist_spotCollection.insertOne(newTouristSpot);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -33,7 +53,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
