@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -43,6 +43,52 @@ async function run() {
       const newTouristSpot = req.body;
       console.log(newTouristSpot);
       const result = await tourist_spotCollection.insertOne(newTouristSpot);
+      res.send(result);
+    });
+
+    // my cart
+    app.get("/myCart/:email", async (req, res) => {
+      console.log(req.params.email);
+      const result = await tourist_spotCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+    });
+
+    // delete
+    app.delete("/tourist_spot/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await tourist_spotCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.get("/singleSpot/:id", async (req, res) => {
+      const result = await tourist_spotCollection.findOne({
+        _id: new ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+
+    // update
+    app.put("/updateSpot/:id", async (req, res) => {
+      console.log(req.params.id);
+      const query = { _id: new ObjectId(req.params.id) };
+      const data = {
+        $set: {
+          country_Name: req.body.country_Name,
+          tourists_spot_name: req.body.tourists_spot_name,
+          spot_Location: req.body.spot_Location,
+          short_Description: req.body.short_Description,
+          average_cost: req.body.average_cost,
+          seasonality: req.body.seasonality,
+          travel_time: req.body.travel_time,
+          totalVisitorsPerYear: req.body.totalVisitorsPerYear,
+          image_Url: req.body.image_Url,
+        },
+      };
+      const result = await tourist_spotCollection.updateOne(query, data);
+      console.log(result);
       res.send(result);
     });
 
