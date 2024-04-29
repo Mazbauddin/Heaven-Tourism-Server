@@ -31,14 +31,14 @@ async function run() {
       .db("tourist_spotDB")
       .collection("tourist_spot");
 
-    // get tourist spot data
+    // get tourist spot data work
     app.get("/tourist_spot", async (req, res) => {
       const cursor = tourist_spotCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    // post tourist spot data
+    // post tourist spot data work here
     app.post("/tourist_spot", async (req, res) => {
       const newTouristSpot = req.body;
       console.log(newTouristSpot);
@@ -46,7 +46,7 @@ async function run() {
       res.send(result);
     });
 
-    // my cart
+    // my cart data work here
     app.get("/myCart/:email", async (req, res) => {
       console.log(req.params.email);
       const result = await tourist_spotCollection
@@ -63,6 +63,7 @@ async function run() {
       res.send(result);
     });
 
+    // single data  work here
     app.get("/singleSpot/:id", async (req, res) => {
       const result = await tourist_spotCollection.findOne({
         _id: new ObjectId(req.params.id),
@@ -70,7 +71,7 @@ async function run() {
       res.send(result);
     });
 
-    // update
+    // update  work here
     app.put("/updateSpot/:id", async (req, res) => {
       console.log(req.params.id);
       const query = { _id: new ObjectId(req.params.id) };
@@ -92,7 +93,7 @@ async function run() {
       res.send(result);
     });
 
-    // delete
+    // delete to the data work here
     app.delete("/delete/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
